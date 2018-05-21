@@ -1,0 +1,8 @@
+/obj
+/QCAR
+/Library
+/Temp
+/xcode
+*.csproj
+*.userprefs
+*.sln
