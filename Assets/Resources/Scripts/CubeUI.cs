@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WishCube;
 
-public class CubeUI : MonoBehaviour {
-
+public class CubeUI : MonoBehaviour
+{
 	// Use this for initialization
 	void Start ()
 	{
@@ -19,7 +20,7 @@ public class CubeUI : MonoBehaviour {
 		camera.transform.rotation.ToAngleAxis (out angle, out axis);
 		transform.position = baseLocation;
 		transform.rotation = baseRotation;
-		transform.RotateAround (Vector3.zero, axis, angle);
+		transform.RotateAround (CubeWorld.Instance.Transform.position, axis, angle);
 	}
 
 	private Vector3 baseLocation;

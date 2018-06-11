@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using WishCube.OpenCV;
 
 namespace WishCube
 {
@@ -8,6 +9,7 @@ namespace WishCube
 	{
 		public HandCursor ()
 		{
+			CVTracker = new ArucoCursorTracker ();
 		}
 
 		public bool IsFingerPicking
@@ -20,10 +22,15 @@ namespace WishCube
 			}
 		}
 
+		public ArucoCursorTracker CVTracker {
+			get;
+			private set;
+		}
+
 		public void Update()
 		{
 //			elapsedTime += Time.deltaTime;
-			var pos = CubeWorld.Instance.ScreenPos;
+			var pos = CVTracker.CursorPosition;
 			timestamps.Add (Time.time);
 			positions.Add (pos);
 
@@ -60,12 +67,12 @@ namespace WishCube
 			var tick2 = timestamps [i];
 			float stayEndTime = tick2;
 
-			// hold position for more than 0.25 seconds
+			// hold position for more than 0.1 seconds
 			while (--i >= 0) {
 				var pos1 = positions [i];
 				var tick1 = timestamps [i];
 				if ((pos1 - pos2).magnitude > 2) {
-					if (stayEndTime - tick1 < 0.2f)
+					if (stayEndTime - tick1 <= 0.1f)
 						return false;
 					++i;
 					break;
@@ -88,7 +95,7 @@ namespace WishCube
 					++i;
 					break;
 				}
-				if (Mathf.Abs(pos1.x - pos2.x) > 4)
+				if (Mathf.Abs(pos1.x - pos2.x) > 5)
 					return false;
 				++ups;
 				pos2 = pos1;
@@ -96,11 +103,11 @@ namespace WishCube
 			}
 			if (i < 0)
 				return false;
-			if (Mathf.Abs (topy - pos2.y) < 4)
-				return false;
 			// click downward for some ticks (pos y increase)
 			int downs = 0;
 			float bottomy = pos2.y;
+			if (Mathf.Abs (topy - bottomy) < 10)
+				return false;
 			while (--i >= 0) {
 				var pos1 = positions [i];
 				var tick1 = timestamps [i];
@@ -110,7 +117,7 @@ namespace WishCube
 					++i;
 					break;
 				}
-				if (Mathf.Abs(pos1.x - pos2.x) > 4)
+				if (Mathf.Abs(pos1.x - pos2.x) > 5)
 					return false;
 				++downs;
 				pos2 = pos1;
@@ -118,8 +125,6 @@ namespace WishCube
 			}
 			if (i < 0)
 				i = 0;
-			if (topy - bottomy < 4)
-				return false;
 			if (lastTime - timestamps[i] < 0.4f)
 				return false;
 			Debug.Log ("clicked!");

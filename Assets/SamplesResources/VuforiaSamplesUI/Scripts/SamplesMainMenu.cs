@@ -112,7 +112,7 @@ public class SamplesMainMenu : MonoBehaviour
         {
             case MenuItem.ModelMode:
             case MenuItem.PlanetMode:
-                dbConfig.DataSetsToLoad = dbConfig.DataSetsToActivate = new[] { "VuforiaMars_Images", "dev1" };
+                dbConfig.DataSetsToLoad = dbConfig.DataSetsToActivate = new[] { "VuforiaMars_Images", "cubes", "thumbs" };
                 break;
         }
     }

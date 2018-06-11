@@ -6,3 +6,4 @@
 *.csproj
 *.userprefs
 *.sln
+.vs
